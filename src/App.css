@@ -1,0 +1,22 @@
+.input-group {
+    margin-bottom: 8px;
+}
+
+label {
+    margin-right: 8px;
+}
+
+.signin, .signup {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.links .link {
+    margin-right: 10px;
+}
+
+.user-details span {
+    display: block;
+}
