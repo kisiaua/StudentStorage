@@ -4,6 +4,8 @@ import Index from "./components/Index.tsx";
 import Register from "./components/Register.tsx";
 import Login from "./components/Login.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
+import RequireAuth from "./components/RequireAuth.tsx";
+import Test from "./components/Test.tsx";
 
 function App() {
   return (
@@ -13,6 +15,10 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="/test" element={<Test />} />
+        </Route>
       </Routes>
     </>
   );

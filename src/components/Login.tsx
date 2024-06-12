@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserFormLogin } from "../models/User.ts";
 import axios, { ENDPOINTS } from "../api/apiConfig.ts";
+import useAuth from "../hooks/useAuth.ts";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<UserFormLogin>({
@@ -11,6 +12,8 @@ const Login = () => {
   const [loginError, setLoginError] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const { setAuth } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,7 +34,11 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log(response.data.token);
+
+      const { token: jwtAccessToken } = response.data;
+      const { email, password } = credentials;
+      setAuth({ email, password, jwtAccessToken });
+
       setLoginError(false);
       setCredentials({ email: "", password: "" });
       navigate("/");

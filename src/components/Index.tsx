@@ -1,5 +1,11 @@
+import { Link } from "react-router-dom";
+
 const Index = () => {
-  return <div>TODO</div>;
+  return (
+    <Link to="/test" className="link">
+      TEST
+    </Link>
+  );
 };
 
 export default Index;
