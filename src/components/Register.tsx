@@ -12,11 +12,12 @@ const Register = () => {
     role: "student",
   });
   const [registrationError, setRegistrationError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setCredentials((prevCredentials) => ({
@@ -32,11 +33,11 @@ const Register = () => {
       credentials.role === "admin"
         ? ENDPOINTS.REGISTER_ADMIN
         : credentials.role === "teacher"
-          ? ENDPOINTS.REGISTER_TEACHER
-          : ENDPOINTS.REGISTER_STUDENT;
+        ? ENDPOINTS.REGISTER_TEACHER
+        : ENDPOINTS.REGISTER_STUDENT;
 
     try {
-      const response = await axios.post(url, JSON.stringify(credentials), {
+      await axios.post(url, JSON.stringify(credentials), {
         headers: { "Content-Type": "application/json" },
       });
       setRegistrationError(false);
@@ -48,8 +49,12 @@ const Register = () => {
         role: "student",
       });
       navigate("/login");
-    } catch (error) {
-      console.log(error.response ? error.response.data : error);
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.data);
+      } else {
+        setErrorMessage(["Błąd! Spróbuj ponownie."]);
+      }
       setRegistrationError(true);
     }
   };
@@ -132,7 +137,7 @@ const Register = () => {
                 placeholder="********"
                 value={credentials.password}
                 onChange={handleChange}
-                minLength={8}
+                minLength={6}
                 required
                 className="border-2 border-gray-300 rounded-lg block p-2.5 w-full"
               />
@@ -159,7 +164,9 @@ const Register = () => {
             </button>
             {registrationError && (
               <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">
-                Błąd! Spróbuj ponownie
+                {errorMessage.map((error, index) => (
+                  <p key={index}>{error}</p>
+                ))}
               </div>
             )}
 

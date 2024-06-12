@@ -23,14 +23,13 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log(JSON.stringify(ENDPOINTS.LOGIN));
     try {
       const response = await axios.post(
         ENDPOINTS.LOGIN,
         JSON.stringify(credentials),
         {
           headers: { "Content-Type": "application/json" },
-        },
+        }
       );
       console.log(response.data.token);
       setLoginError(false);
@@ -75,7 +74,6 @@ const Login = () => {
                 name="password"
                 value={credentials.password}
                 onChange={handleChange}
-                minLength={8}
                 autoComplete="off"
                 required
                 placeholder="********"
