@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios, { ENDPOINTS } from "../api/apiConfig";
 import { Link, useNavigate } from "react-router-dom";
 import { UserFormRegister } from "../models/User.ts";
+import { registerUser } from "../api/authenticateApiClient.ts";
 
 const Register = () => {
   const [credentials, setCredentials] = useState<UserFormRegister>({
@@ -29,17 +30,9 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const url =
-      credentials.role === "admin"
-        ? ENDPOINTS.REGISTER_ADMIN
-        : credentials.role === "teacher"
-        ? ENDPOINTS.REGISTER_TEACHER
-        : ENDPOINTS.REGISTER_STUDENT;
-
     try {
-      await axios.post(url, JSON.stringify(credentials), {
-        headers: { "Content-Type": "application/json" },
-      });
+      await registerUser(credentials);
+
       setRegistrationError(false);
       setCredentials({
         firstName: "",

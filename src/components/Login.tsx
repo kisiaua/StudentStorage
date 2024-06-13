@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserFormLogin } from "../models/User.ts";
-import axios, { ENDPOINTS } from "../api/apiConfig.ts";
 import useAuth from "../hooks/useAuth.ts";
+import { loginUser } from "../api/authenticateApiClient.ts";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<UserFormLogin>({
@@ -27,22 +27,16 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        ENDPOINTS.LOGIN,
-        JSON.stringify(credentials),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await loginUser(credentials);
 
-      const { token: jwtAccessToken } = response.data;
+      const { token: jwtAccessToken } = response;
       const { email, password } = credentials;
       setAuth({ email, password, jwtAccessToken });
 
       setLoginError(false);
       setCredentials({ email: "", password: "" });
       navigate("/");
-    } catch {
+    } catch (error: any) {
       setLoginError(true);
     }
   };
