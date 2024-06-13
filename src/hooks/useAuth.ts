@@ -36,13 +36,16 @@ const useAuth = () => {
 
   const getUserRole = () => {
     if (!auth?.jwtAccessToken) {
-      return null;
+      return [];
     }
 
     const decodedToken = decodeToken(auth.jwtAccessToken);
-    return decodedToken?.[
-      "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-    ];
+    const roles =
+      decodedToken?.[
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+      ];
+
+    return Array.isArray(roles) ? roles : [roles];
   };
 
   const isTokenExpired = () => {

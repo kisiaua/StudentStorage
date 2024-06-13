@@ -6,6 +6,8 @@ import Login from "./pages/Login.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import RequireAuth from "./components/RequireAuth.tsx";
 import Test from "./components/Test.tsx";
+import MyCourses from "./pages/MyCourses.tsx";
+import { UserRoles } from "./models/UserRoles.ts";
 
 function App() {
   return (
@@ -16,8 +18,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        <Route element={<RequireAuth />}>
+        <Route element={<RequireAuth allowedRoles={UserRoles.Teacher} />}>
           <Route path="/test" element={<Test />} />
+          <Route path="/mycourses" element={<MyCourses />} />
         </Route>
       </Routes>
     </>
