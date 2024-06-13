@@ -2,7 +2,7 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthProvider.tsx";
 
 const useAuth = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, setAuth, clearAuth } = useContext(AuthContext);
 
   const decodeToken = (token: string) => {
     try {
@@ -45,7 +45,7 @@ const useAuth = () => {
     ];
   };
 
-  return { auth, setAuth, getUserId, getUserRole };
+  return { auth, setAuth, getUserId, getUserRole, clearAuth };
 };
 
 export default useAuth;
