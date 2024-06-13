@@ -45,7 +45,22 @@ const useAuth = () => {
     ];
   };
 
-  return { auth, setAuth, getUserId, getUserRole, clearAuth };
+  const isTokenExpired = () => {
+    if (!auth?.jwtAccessToken) {
+      return true;
+    }
+
+    const decodedToken = decodeToken(auth.jwtAccessToken);
+    const expiry = decodedToken?.exp;
+
+    if (!expiry) {
+      return true;
+    }
+
+    return Date.now() >= expiry * 1000;
+  };
+
+  return { auth, setAuth, getUserId, getUserRole, isTokenExpired, clearAuth };
 };
 
 export default useAuth;
