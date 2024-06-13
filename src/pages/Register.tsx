@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios, { ENDPOINTS } from "../api/apiConfig";
 import { Link, useNavigate } from "react-router-dom";
 import { UserFormRegister } from "../models/User.ts";
 import { registerUser } from "../api/authenticateApiClient.ts";

@@ -1,18 +1,21 @@
-import axios, { ENDPOINTS } from "./apiConfig.ts";
+import axios from "./apiConfig.ts";
 import { UserFormRegister, UserFormLogin } from "../models/User.ts";
 
 export const registerUser = async (credentials: UserFormRegister) => {
   try {
-    const url =
-      credentials.role === "admin"
-        ? ENDPOINTS.REGISTER_ADMIN
-        : credentials.role === "teacher"
-        ? ENDPOINTS.REGISTER_TEACHER
-        : ENDPOINTS.REGISTER_STUDENT;
+    const roleEndpoints: { [key: string]: string } = {
+      admin: "/api/v1/Authenticate/register-admin",
+      teacher: "/api/v1/Authenticate/register-teacher",
+      student: "/api/v1/Authenticate/register-student",
+    };
 
-    await axios.post(url, JSON.stringify(credentials), {
-      headers: { "Content-Type": "application/json" },
-    });
+    await axios.post(
+      roleEndpoints[credentials.role],
+      JSON.stringify(credentials),
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } catch (err) {
     console.log(err);
     throw err;
@@ -22,7 +25,7 @@ export const registerUser = async (credentials: UserFormRegister) => {
 export const loginUser = async (credentials: UserFormLogin) => {
   try {
     const response = await axios.post(
-      ENDPOINTS.LOGIN,
+      "/api/v1/Authenticate/login",
       JSON.stringify(credentials),
       {
         headers: { "Content-Type": "application/json" },
