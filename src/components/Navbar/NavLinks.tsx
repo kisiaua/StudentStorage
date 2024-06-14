@@ -9,9 +9,9 @@ interface NavLinksProps {
 }
 
 const NavLinks: React.FC<NavLinksProps> = ({ isMenuOpen, toggleMenu }) => {
-  const { isTokenExpired, getUserRole, clearAuth } = useAuth();
+  const { isTokenExpired, getUserRoles, clearAuth } = useAuth();
 
-  const isAdmin = getUserRole().includes(UserRoles.Admin);
+  const isAdmin = getUserRoles().includes(UserRoles.Admin);
 
   return (
     <div className={`${isMenuOpen ? "" : "hidden"} w-full md:block md:w-auto`}>

@@ -7,8 +7,8 @@ interface RequireAuthProps {
 }
 
 const RequireAuth = ({ allowedRoles }: RequireAuthProps) => {
-  const { getUserRole, isTokenExpired } = useAuth();
-  const isRoleAllowed = getUserRole().includes(allowedRoles);
+  const { getUserRoles, isTokenExpired } = useAuth();
+  const isRoleAllowed = getUserRoles().includes(allowedRoles);
 
   return isRoleAllowed && !isTokenExpired() ? (
     <Outlet />

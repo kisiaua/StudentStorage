@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import AuthContext from "../context/AuthProvider.tsx";
+import { UserRoles } from "../models/UserRoles.ts";
 
 const useAuth = () => {
   const { auth, setAuth, clearAuth } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const useAuth = () => {
           .map(function (c) {
             return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
           })
-          .join("")
+          .join(""),
       );
       return JSON.parse(jsonPayload);
     } catch (error) {
@@ -35,6 +36,16 @@ const useAuth = () => {
   };
 
   const getUserRole = () => {
+    const roles = getUserRoles();
+
+    if (roles.includes(UserRoles.Admin)) return UserRoles.Admin;
+    if (roles.includes(UserRoles.Teacher)) return UserRoles.Teacher;
+    if (roles.includes(UserRoles.Student)) return UserRoles.Student;
+
+    return null;
+  };
+
+  const getUserRoles = () => {
     if (!auth?.jwtAccessToken) {
       return [];
     }
@@ -63,7 +74,15 @@ const useAuth = () => {
     return Date.now() >= expiry * 1000;
   };
 
-  return { auth, setAuth, getUserId, getUserRole, isTokenExpired, clearAuth };
+  return {
+    auth,
+    setAuth,
+    getUserId,
+    getUserRole,
+    getUserRoles,
+    isTokenExpired,
+    clearAuth,
+  };
 };
 
 export default useAuth;
