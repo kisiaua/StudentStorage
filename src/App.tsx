@@ -18,7 +18,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        <Route element={<RequireAuth allowedRoles={UserRoles.Teacher} />}>
+        <Route element={<RequireAuth allowedRoles={UserRoles.Student} />}>
           <Route path="/test" element={<Test />} />
           <Route path="/mycourses" element={<MyCourses />} />
         </Route>
