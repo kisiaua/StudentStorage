@@ -18,7 +18,7 @@ const Courses = () => {
 
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
-      <div className="flex flex-col w-full max-w-3xl bg-white border border-gray-300 rounded-lg shadow">
+      <div className="flex flex-col max-w-3xl bg-white border border-gray-300 rounded-lg shadow">
         <div className="flex flex-col flex-grow justify-between p-5">
           <h5 className="mb-3 text-2xl font-bold tracking-tight text-gray-900">
             Wszystkie kursy
@@ -26,7 +26,7 @@ const Courses = () => {
           <ul className="divide-y divide-gray-300">
             {courses?.map((course: Course) => (
               <li className="py-3 sm:py-4">
-                <div className="flex items-center space-x-5 xl:space-x-0">
+                <div className="flex items-center space-x-8">
                   <div className="flex-1 min-w-0 text-gray-900">
                     <h5 className="text-lg font-semibold">{course.name}</h5>
                     <p className="mt-3 text-gray-700">

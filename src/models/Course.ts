@@ -10,3 +10,8 @@ export type Course = {
   };
   createdAt: string;
 };
+
+export type CourseForm = {
+  name: string;
+  description: string;
+};

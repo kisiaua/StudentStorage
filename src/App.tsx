@@ -9,6 +9,7 @@ import Test from "./components/Test.tsx";
 import MyCourses from "./pages/MyCourses.tsx";
 import { UserRoles } from "./models/UserRoles.ts";
 import Courses from "./pages/Courses.tsx";
+import CreateCourse from "./pages/CreateCourse.tsx";
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
           <Route path="/test" element={<Test />} />
           <Route path="/my-courses" element={<MyCourses />} />
           <Route path="/courses" element={<Courses />} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={UserRoles.Teacher} />}>
+          <Route path="/create-course" element={<CreateCourse />} />
         </Route>
       </Routes>
     </>
