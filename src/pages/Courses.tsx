@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Course } from "../models/Course.ts";
 import { getCourses } from "../api/coursesApiClient.ts";
 import useAuth from "../hooks/useAuth.ts";
+import ConfirmJoinRequestModal from "../components/ConfirmJoinRequestModal.tsx";
 
 const Courses = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -35,9 +36,7 @@ const Courses = () => {
                       : {course.creator.firstName} {course.creator.lastName}
                     </p>
                   </div>
-                  <button className="text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-center py-2 px-2.5">
-                    Dołącz
-                  </button>
+                  <ConfirmJoinRequestModal course={course} />
                 </div>
               </li>
             ))}
