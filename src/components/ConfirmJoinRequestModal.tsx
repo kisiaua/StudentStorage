@@ -39,7 +39,7 @@ const ConfirmJoinRequestModal = ({ course }: ConfirmJoinRequestModalProps) => {
     <>
       <button
         onClick={() => setIsJoinOpen(true)}
-        className="text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-center py-2 px-2.5"
+        className="text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-center py-2.5 px-3.5"
       >
         <span>Dołącz</span>
       </button>

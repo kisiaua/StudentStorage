@@ -3,6 +3,7 @@ import { Course } from "../models/Course.ts";
 import { getCourses } from "../api/coursesApiClient.ts";
 import useAuth from "../hooks/useAuth.ts";
 import ConfirmJoinRequestModal from "../components/ConfirmJoinRequestModal.tsx";
+import { Link } from "react-router-dom";
 
 const Courses = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -28,7 +29,9 @@ const Courses = () => {
               <li className="py-3 sm:py-4">
                 <div className="flex items-center space-x-8">
                   <div className="flex-1 min-w-0 text-gray-900">
-                    <h5 className="text-lg font-semibold">{course.name}</h5>
+                    <Link to={`/course/${course.id}`}>
+                      <h5 className="text-lg font-semibold">{course.name}</h5>
+                    </Link>
                     <p className="mt-3 text-gray-700">
                       <span className="font-medium text-gray-950">
                         Nauczyciel
