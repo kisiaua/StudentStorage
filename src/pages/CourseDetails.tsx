@@ -9,15 +9,17 @@ import {
 import { Course } from "../models/Course.ts";
 import ConfirmJoinRequestModal from "../components/ConfirmJoinRequestModal.tsx";
 import { Assignment } from "../models/Assignment.ts";
+import { UserRoles } from "../models/UserRoles.ts";
 
 const CourseDetails = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [forbiddenCourse, setForbiddenCourse] = useState<Course>();
   const [assignments, setAssignments] = useState<Assignment[] | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("Zadania");
 
   const navigate = useNavigate();
   const { id } = useParams();
-  const { auth } = useAuth();
+  const { auth, getUserRole } = useAuth();
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -77,35 +79,62 @@ const CourseDetails = () => {
                 {course.name}
               </h1>
               <p>{course.description}</p>
-              <h2 className="mt-5 text-2xl font-semibold tracking-tight text-gray-900">
-                Zadania
-              </h2>
-              {assignments === null ? (
-                <p>Ładowanie zadań...</p>
-              ) : assignments.length === 0 ? (
-                <p>Brak zadań do wyświetlenia.</p>
-              ) : (
-                <ul className="divide-y divide-gray-300">
-                  {assignments.map((assignment: Assignment) => (
-                    <li className="py-3 sm:py-4">
-                      <div className="flex items-center">
-                        <div className="flex-1 text-gray-950">
-                          <h5 className="text-xl font-semibold">
-                            {assignment.title}
-                          </h5>
-                          <p className="mt-3">{assignment.description}</p>
-                          <p className="mt-3 text-gray-900">
-                            <span className="font-semibold text-gray-950">
-                              Termin
-                            </span>
-                            : {assignment.dueDate}
-                          </p>
-                        </div>
-                      </div>
+              {getUserRole() === UserRoles.Teacher && (
+                <div className="mt-2 text-center text-gray-700 border-b border-gray-200">
+                  <ul className="flex flex-wrap -mb-px">
+                    <li
+                      className="me-2"
+                      onClick={() => setActiveTab("Zadania")}
+                    >
+                      <a
+                        className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "Zadania" ? "border-blue-600 text-blue-600" : "border-transparent hover:text-gray-600 hover:border-gray-300"}`}
+                      >
+                        Zadania
+                      </a>
                     </li>
-                  ))}
-                </ul>
+                    <li
+                      className="me-2"
+                      onClick={() => setActiveTab("Uczestnicy")}
+                    >
+                      <a
+                        className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "Uczestnicy" ? "border-blue-600 text-blue-600" : "border-transparent hover:text-gray-600 hover:border-gray-300"}`}
+                      >
+                        Uczestnicy
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               )}
+              <h2 className="mt-5 text-2xl font-semibold tracking-tight text-gray-900">
+                {activeTab}
+              </h2>
+              {activeTab === "Zadania" &&
+                (assignments === null ? (
+                  <p>Ładowanie zadań...</p>
+                ) : assignments.length === 0 ? (
+                  <p>Brak zadań do wyświetlenia.</p>
+                ) : (
+                  <ul className="divide-y divide-gray-300">
+                    {assignments.map((assignment: Assignment) => (
+                      <li className="py-3 sm:py-4">
+                        <div className="flex items-center">
+                          <div className="flex-1 text-gray-950">
+                            <h5 className="text-xl font-semibold">
+                              {assignment.title}
+                            </h5>
+                            <p className="mt-3">{assignment.description}</p>
+                            <p className="mt-3 text-gray-900">
+                              <span className="font-semibold text-gray-950">
+                                Termin
+                              </span>
+                              : {assignment.dueDate}
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ))}
             </div>
           )}
         </div>
