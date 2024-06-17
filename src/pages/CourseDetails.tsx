@@ -1,21 +1,26 @@
 import useAuth from "../hooks/useAuth.ts";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getAssignments,
   getCourse,
   getCourses,
+  getJoinRequests,
+  handleJoinRequest,
 } from "../api/coursesApiClient.ts";
 import { Course } from "../models/Course.ts";
 import ConfirmJoinRequestModal from "../components/ConfirmJoinRequestModal.tsx";
 import { Assignment } from "../models/Assignment.ts";
 import { UserRoles } from "../models/UserRoles.ts";
+import { JoinRequest } from "../models/JoinRequest.ts";
+import { StatusDescriptions } from "../models/StatusDescription.ts";
 
 const CourseDetails = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [forbiddenCourse, setForbiddenCourse] = useState<Course>();
   const [assignments, setAssignments] = useState<Assignment[] | null>(null);
   const [activeTab, setActiveTab] = useState<string>("Zadania");
+  const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -46,6 +51,29 @@ const CourseDetails = () => {
     };
     fetchAssignments().then((data) => setAssignments(data));
   }, [auth?.jwtAccessToken, id]);
+
+  useEffect(() => {
+    const fetchJoinRequests = async () => {
+      return await getJoinRequests(id as string, auth?.jwtAccessToken ?? "");
+    };
+    fetchJoinRequests().then((data) => setJoinRequests(data));
+  }, [auth?.jwtAccessToken, id]);
+
+  const handleRequest = async (
+    requestId: number,
+    courseId: number,
+    status: number,
+  ) => {
+    try {
+      await handleJoinRequest(requestId, status, auth?.jwtAccessToken ?? "");
+      await getJoinRequests(
+        courseId as string,
+        auth?.jwtAccessToken ?? "",
+      ).then((data) => setJoinRequests(data));
+    } catch (error: any) {
+      console.log("error handling request", error);
+    }
+  };
 
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
@@ -135,6 +163,95 @@ const CourseDetails = () => {
                     ))}
                   </ul>
                 ))}
+              {activeTab === "Uczestnicy" && (
+                <>
+                  <h1 className="mt-3 text-lg font-semibold">
+                    Oczekujące prośby:
+                  </h1>
+                  <table className="mt-1 w-full">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Imię Nazwisko
+                        </th>
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Status
+                        </th>
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Akcje
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {joinRequests
+                        .filter((request) => request.status === 0)
+                        .map((request) => (
+                          <tr key={request.id} className="border-b">
+                            <td className="p-2 text-sm font-normal text-left">
+                              {request.id}
+                            </td>
+                            <td className="p-2 text-sm font-normal text-left">
+                              {StatusDescriptions[request.statusDescription]}
+                            </td>
+                            <td className="p-2 text-sm font-medium text-left space-x-4">
+                              <button
+                                onClick={() =>
+                                  handleRequest(request.id, request.courseId, 1)
+                                }
+                                className="text-blue-600"
+                              >
+                                Akceptuj
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleRequest(request.id, request.courseId, 2)
+                                }
+                                className="text-red-600"
+                              >
+                                Odrzuć
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                  <h1 className="mt-5 text-lg font-semibold">
+                    Zapisani użytkownicy:
+                  </h1>
+                  <table className="mt-1 w-full">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Imię Nazwisko
+                        </th>
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Status
+                        </th>
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Dołączono
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {joinRequests
+                        .filter((request) => request.status === 1)
+                        .map((request) => (
+                          <tr key={request.id} className="border-b">
+                            <td className="p-2 text-sm font-normal text-left">
+                              {request.id}
+                            </td>
+                            <td className="p-2 text-sm font-normal text-left">
+                              {StatusDescriptions[request.statusDescription]}
+                            </td>
+                            <td className="p-2 text-sm font-normal text-left">
+                              {request.updatedAt}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </>
+              )}
             </div>
           )}
         </div>

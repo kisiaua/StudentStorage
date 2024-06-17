@@ -66,6 +66,37 @@ export const sendRequestToJoinCourse = async (
   }
 };
 
+export const getJoinRequests = async (id: string, jwtAccessToken: string) => {
+  try {
+    const response = await axios.get(`/api/v1/Courses/${id}/Requests/Pending`, {
+      headers: { Authorization: `Bearer ${jwtAccessToken}` },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const handleJoinRequest = async (
+  requestId: number,
+  status: number,
+  jwtAccessToken: string,
+) => {
+  try {
+    const response = await axios.put(`/api/v1/Requests/${requestId}`, status, {
+      headers: {
+        Authorization: `Bearer ${jwtAccessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
 export const getAssignments = async (id: string, jwtAccessToken: string) => {
   try {
     const response = await axios.get(`/api/v1/Courses/${id}/Assignments`, {
