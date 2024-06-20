@@ -1,5 +1,5 @@
 import useAuth from "../hooks/useAuth.ts";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import {
   getAssignments,
@@ -147,9 +147,13 @@ const CourseDetails = () => {
                       <li className="py-3 sm:py-4">
                         <div className="flex items-center">
                           <div className="flex-1 text-gray-950">
-                            <h5 className="text-xl font-semibold">
-                              {assignment.title}
-                            </h5>
+                            <Link
+                              to={`/course/${course.id}/assignment/${assignment.id}`}
+                            >
+                              <h5 className="text-xl font-semibold">
+                                {assignment.title}
+                              </h5>
+                            </Link>
                             <p className="mt-3">{assignment.description}</p>
                             <p className="mt-3 text-gray-900">
                               <span className="font-semibold text-gray-950">
