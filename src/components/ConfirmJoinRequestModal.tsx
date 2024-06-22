@@ -11,6 +11,7 @@ interface ConfirmJoinRequestModalProps {
 const ConfirmJoinRequestModal = ({ course }: ConfirmJoinRequestModalProps) => {
   const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
   const [isRequestPending, setIsRequestPending] = useState<boolean>(false);
+  const [isAlreadyMember, setIsAlreadyMember] = useState<boolean>(false);
 
   const { auth } = useAuth();
 
@@ -20,9 +21,9 @@ const ConfirmJoinRequestModal = ({ course }: ConfirmJoinRequestModalProps) => {
         course.id,
         auth?.jwtAccessToken ?? "",
       );
-      console.log(response);
       setIsJoinOpen(false);
     } catch (err: any) {
+      console.log(err.response.data);
       if (
         err.response.status === 400 &&
         err.response.data ===
@@ -30,6 +31,13 @@ const ConfirmJoinRequestModal = ({ course }: ConfirmJoinRequestModalProps) => {
       ) {
         setIsJoinOpen(false);
         setIsRequestPending(true);
+      }
+      if (
+        err.response.status === 400 &&
+        err.response.data === "User is already a member of the course."
+      ) {
+        setIsJoinOpen(false);
+        setIsAlreadyMember(true);
       }
       console.log("error joining course", err);
     }
@@ -65,17 +73,31 @@ const ConfirmJoinRequestModal = ({ course }: ConfirmJoinRequestModalProps) => {
         </div>
       </Modal>
       <Modal
-        isOpen={isRequestPending}
-        onClose={() => setIsRequestPending(false)}
+        isOpen={isRequestPending || isAlreadyMember}
+        onClose={() => {
+          setIsRequestPending(false);
+          setIsAlreadyMember(false);
+        }}
       >
-        <h3 className="text-base text-center">
-          Wysłałeś już prośbę o dołączenie do kursu{" "}
-          <span className="font-semibold">{course.name}</span>. Proszę czekać na
-          akceptację.
-        </h3>
+        {isRequestPending && (
+          <h3 className="text-base text-center">
+            Wysłałeś już prośbę o dołączenie do kursu{" "}
+            <span className="font-semibold">{course.name}</span>. Proszę czekać
+            na akceptację.
+          </h3>
+        )}
+        {isAlreadyMember && (
+          <h3 className="text-base text-center">
+            Jesteś już członkiem kursu{" "}
+            <span className="font-semibold">{course.name}</span>.
+          </h3>
+        )}
         <div className="text-center">
           <button
-            onClick={() => setIsRequestPending(false)}
+            onClick={() => {
+              setIsRequestPending(false);
+              setIsAlreadyMember(false);
+            }}
             className="py-2.5 px-3.5 mt-4 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
           >
             OK
