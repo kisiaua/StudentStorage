@@ -38,3 +38,18 @@ export const SubmitSolution = async (
     throw err;
   }
 };
+
+export const getAssignmentSummarySolutions = async (
+  id: string,
+  jwtAccessToken: string,
+) => {
+  try {
+    const response = await axios.get(`/api/v1/Assignments/${id}/Solutions`, {
+      headers: { Authorization: `Bearer ${jwtAccessToken}` },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

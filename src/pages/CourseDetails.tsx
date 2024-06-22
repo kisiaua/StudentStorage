@@ -56,7 +56,10 @@ const CourseDetails = () => {
     const fetchJoinRequests = async () => {
       return await getJoinRequests(id as string, auth?.jwtAccessToken ?? "");
     };
-    fetchJoinRequests().then((data) => setJoinRequests(data));
+    fetchJoinRequests().then((data) => {
+      console.log(data);
+      setJoinRequests(data);
+    });
   }, [auth?.jwtAccessToken, id]);
 
   const handleRequest = async (
@@ -192,7 +195,7 @@ const CourseDetails = () => {
                         .map((request) => (
                           <tr key={request.id} className="border-b">
                             <td className="p-2 text-sm font-normal text-left">
-                              {request.user.firstName} {request.user.lastName}
+                              {request.user?.firstName} {request.user?.lastName}
                             </td>
                             <td className="p-2 text-sm font-normal text-left">
                               {StatusDescriptions[request.statusDescription]}

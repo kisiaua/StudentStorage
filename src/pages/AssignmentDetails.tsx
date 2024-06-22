@@ -1,19 +1,27 @@
 import { useParams } from "react-router-dom";
 import { Assignment } from "../models/Assignment.ts";
-import { useEffect, useState } from "react";
-import { getAssignment, SubmitSolution } from "../api/assignmentsApiClient.ts";
+import React, { useEffect, useState } from "react";
+import {
+  getAssignment,
+  getAssignmentSummarySolutions,
+  SubmitSolution,
+} from "../api/assignmentsApiClient.ts";
 import useAuth from "../hooks/useAuth.ts";
 import AddAssignmentDropzone from "../components/AddAssignmentDropzone.tsx";
 import ConfirmationSentAssignmentModal from "../components/ConfirmationSentAssignmentModal.tsx";
+import { UserRoles } from "../models/UserRoles.ts";
+import { StatusDescriptions } from "../models/StatusDescription.ts";
+import { Solution, SolutionStatuses } from "../models/Solution.ts";
 
 const AssignmentDetails = () => {
   const [assignment, setAssignment] = useState<Assignment>();
+  const [solutions, setSolutions] = useState<Solution[]>([]);
   const [isAddAssignmentFormOpen, setIsAddAssignmentFormOpen] =
     useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
 
   const { assignmentId } = useParams();
-  const { auth } = useAuth();
+  const { auth, getUserRole } = useAuth();
 
   useEffect(() => {
     const fetchAssignment = async () => {
@@ -23,6 +31,16 @@ const AssignmentDetails = () => {
       );
     };
     fetchAssignment().then((data) => setAssignment(data));
+  }, [assignmentId, auth?.jwtAccessToken]);
+
+  useEffect(() => {
+    const fetchSummarySolutions = async () => {
+      return await getAssignmentSummarySolutions(
+        assignmentId as string,
+        auth?.jwtAccessToken ?? "",
+      );
+    };
+    fetchSummarySolutions().then((data) => setSolutions(data));
   }, [assignmentId, auth?.jwtAccessToken]);
 
   const handleAddButton = () => {
@@ -60,14 +78,15 @@ const AssignmentDetails = () => {
                 <span className="font-semibold text-gray-950">Termin</span>:{" "}
                 {assignment?.dueDate}
               </p>
-              {!isAddAssignmentFormOpen && (
-                <button
-                  onClick={handleAddButton}
-                  className="py-2.5 px-3.5 mt-4 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                >
-                  Dodaj zadanie
-                </button>
-              )}
+              {!isAddAssignmentFormOpen &&
+                getUserRole() === UserRoles.Student && (
+                  <button
+                    onClick={handleAddButton}
+                    className="py-2.5 px-3.5 mt-4 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                  >
+                    Dodaj zadanie
+                  </button>
+                )}
               {isAddAssignmentFormOpen && (
                 <div className="mt-5">
                   <AddAssignmentDropzone files={files} setFiles={setFiles} />
@@ -78,6 +97,37 @@ const AssignmentDetails = () => {
                     setFiles={setFiles}
                   />
                 </div>
+              )}
+              {getUserRole() === UserRoles.Teacher && (
+                <>
+                  <h1 className="mt-5 text-lg font-semibold">
+                    Status przesłanych rozwiązań
+                  </h1>
+                  <table className="mt-1 w-full">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Imię Nazwisko
+                        </th>
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {solutions.map((solution) => (
+                        <tr key={solution.id} className="border-b">
+                          <td className="p-2 text-sm font-normal text-left">
+                            {solution.firstName} {solution.lastName}
+                          </td>
+                          <td className="p-2 text-sm font-normal text-left">
+                            {SolutionStatuses[solution.solutionStatus]}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
               )}
             </>
           )}
