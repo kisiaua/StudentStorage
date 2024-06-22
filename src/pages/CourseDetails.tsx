@@ -192,7 +192,7 @@ const CourseDetails = () => {
                         .map((request) => (
                           <tr key={request.id} className="border-b">
                             <td className="p-2 text-sm font-normal text-left">
-                              {request.id}
+                              {request.user.firstName} {request.user.lastName}
                             </td>
                             <td className="p-2 text-sm font-normal text-left">
                               {StatusDescriptions[request.statusDescription]}
@@ -242,7 +242,7 @@ const CourseDetails = () => {
                         .map((request) => (
                           <tr key={request.id} className="border-b">
                             <td className="p-2 text-sm font-normal text-left">
-                              {request.id}
+                              {request.user.firstName} {request.user.lastName}
                             </td>
                             <td className="p-2 text-sm font-normal text-left">
                               {StatusDescriptions[request.statusDescription]}
