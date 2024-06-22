@@ -147,28 +147,32 @@ const CourseDetails = () => {
                   <p>Brak zadań do wyświetlenia.</p>
                 ) : (
                   <ul className="divide-y divide-gray-300">
-                    {assignments.map((assignment: Assignment) => (
-                      <li className="py-3 sm:py-4">
-                        <div className="flex items-center">
-                          <div className="flex-1 text-gray-950">
-                            <Link
-                              to={`/course/${course.id}/assignment/${assignment.id}`}
-                            >
-                              <h5 className="text-xl font-semibold">
-                                {assignment.title}
-                              </h5>
-                            </Link>
-                            <p className="mt-3">{assignment.description}</p>
-                            <p className="mt-3 text-gray-900">
-                              <span className="font-semibold text-gray-950">
-                                Termin
-                              </span>
-                              : {parseDateToLocalFormat(assignment.dueDate)}
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
+                    {assignments.map(
+                      (assignment: Assignment) =>
+                        (!assignment.hidden ||
+                          getUserRole() === UserRoles.Teacher) && (
+                          <li className="py-3 sm:py-4">
+                            <div className="flex items-center">
+                              <div className="flex-1 text-gray-950">
+                                <Link
+                                  to={`/course/${course.id}/assignment/${assignment.id}`}
+                                >
+                                  <h5 className="text-xl font-semibold">
+                                    {assignment.title}
+                                  </h5>
+                                </Link>
+                                <p className="mt-3">{assignment.description}</p>
+                                <p className="mt-3 text-gray-900">
+                                  <span className="font-semibold text-gray-950">
+                                    Termin
+                                  </span>
+                                  : {parseDateToLocalFormat(assignment.dueDate)}
+                                </p>
+                              </div>
+                            </div>
+                          </li>
+                        ),
+                    )}
                   </ul>
                 ))}
               {activeTab === "Uczestnicy" && (
