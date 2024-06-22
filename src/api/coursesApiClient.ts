@@ -25,6 +25,30 @@ export const getCourse = async (id: string, jwtAccessToken: string) => {
   }
 };
 
+export const getStudentCourses = async (id: number, jwtAccessToken: string) => {
+  try {
+    const response = await axios.get(`/api/v1/Users/${id}/MemberCourses`, {
+      headers: { Authorization: `Bearer ${jwtAccessToken}` },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const getTeacherCourses = async (id: number, jwtAccessToken: string) => {
+  try {
+    const response = await axios.get(`/api/v1/Users/${id}/CreatedCourses`, {
+      headers: { Authorization: `Bearer ${jwtAccessToken}` },
+    });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
 export const createCourse = async (
   course: CourseForm,
   jwtAccessToken: string,
