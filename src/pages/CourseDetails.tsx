@@ -14,6 +14,7 @@ import { Assignment } from "../models/Assignment.ts";
 import { UserRoles } from "../models/UserRoles.ts";
 import { JoinRequest } from "../models/JoinRequest.ts";
 import { StatusDescriptions } from "../models/StatusDescription.ts";
+import { parseDateToLocalFormat } from "../utils/dateUtils.ts";
 
 const CourseDetails = () => {
   const [course, setCourse] = useState<Course | null>(null);
@@ -162,7 +163,7 @@ const CourseDetails = () => {
                               <span className="font-semibold text-gray-950">
                                 Termin
                               </span>
-                              : {assignment.dueDate}
+                              : {parseDateToLocalFormat(assignment.dueDate)}
                             </p>
                           </div>
                         </div>
@@ -251,7 +252,7 @@ const CourseDetails = () => {
                               {StatusDescriptions[request.statusDescription]}
                             </td>
                             <td className="p-2 text-sm font-normal text-left">
-                              {request.updatedAt}
+                              {parseDateToLocalFormat(request.updatedAt)}
                             </td>
                           </tr>
                         ))}

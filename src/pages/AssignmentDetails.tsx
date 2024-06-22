@@ -12,6 +12,7 @@ import ConfirmationSentAssignmentModal from "../components/ConfirmationSentAssig
 import { UserRoles } from "../models/UserRoles.ts";
 import { StatusDescriptions } from "../models/StatusDescription.ts";
 import { Solution, SolutionStatuses } from "../models/Solution.ts";
+import { parseDateToLocalFormat } from "../utils/dateUtils.ts";
 
 const AssignmentDetails = () => {
   const [assignment, setAssignment] = useState<Assignment>();
@@ -72,11 +73,11 @@ const AssignmentDetails = () => {
               <p className="mt-2 text-gray-950">{assignment?.description}</p>
               <p className="mt-2 text-gray-900">
                 <span className="font-semibold text-gray-950">Utworzono</span>:{" "}
-                {assignment?.createdAt}
+                {parseDateToLocalFormat(assignment?.createdAt as string)}
               </p>
               <p className="mt-1 text-gray-900">
                 <span className="font-semibold text-gray-950">Termin</span>:{" "}
-                {assignment?.dueDate}
+                {parseDateToLocalFormat(assignment?.dueDate as string)}
               </p>
               {!isAddAssignmentFormOpen &&
                 getUserRole() === UserRoles.Student && (
