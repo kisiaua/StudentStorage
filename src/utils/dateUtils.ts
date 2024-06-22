@@ -1,4 +1,6 @@
 export const parseDateToLocalFormat = (dateString: string) => {
+  console.log("dateString", dateString);
+
   const date = new Date(dateString);
 
   const weekday = new Intl.DateTimeFormat("pl-PL", { weekday: "long" }).format(

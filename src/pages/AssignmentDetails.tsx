@@ -56,6 +56,8 @@ const AssignmentDetails = () => {
     );
   };
 
+  console.log(assignment?.createdAt);
+
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
       <div className="flex flex-col max-w-3xl bg-white border border-gray-300 rounded-lg shadow">
@@ -73,11 +75,15 @@ const AssignmentDetails = () => {
               <p className="mt-2 text-gray-950">{assignment?.description}</p>
               <p className="mt-2 text-gray-900">
                 <span className="font-semibold text-gray-950">Utworzono</span>:{" "}
-                {parseDateToLocalFormat(assignment?.createdAt as string)}
+                {assignment
+                  ? parseDateToLocalFormat(assignment.createdAt as string)
+                  : "Ładowanie..."}
               </p>
               <p className="mt-1 text-gray-900">
                 <span className="font-semibold text-gray-950">Termin</span>:{" "}
-                {parseDateToLocalFormat(assignment?.dueDate as string)}
+                {assignment
+                  ? parseDateToLocalFormat(assignment?.dueDate as string)
+                  : "Ładowanie..."}
               </p>
               {!isAddAssignmentFormOpen &&
                 getUserRole() === UserRoles.Student && (

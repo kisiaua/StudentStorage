@@ -12,6 +12,7 @@ import Courses from "./pages/Courses.tsx";
 import CreateCourse from "./pages/CreateCourse.tsx";
 import CourseDetails from "./pages/CourseDetails.tsx";
 import AssignmentDetails from "./pages/AssignmentDetails.tsx";
+import CreateAssignment from "./pages/CreateAssignment.tsx";
 
 function App() {
   return (
@@ -35,6 +36,10 @@ function App() {
 
         <Route element={<RequireAuth allowedRoles={UserRoles.Teacher} />}>
           <Route path="/create-course" element={<CreateCourse />} />
+          <Route
+            path="/course/:id/create-assignment"
+            element={<CreateAssignment />}
+          />
         </Route>
       </Routes>
     </>

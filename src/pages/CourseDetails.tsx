@@ -81,7 +81,7 @@ const CourseDetails = () => {
 
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
-      <div className="flex flex-col max-w-3xl bg-white border border-gray-300 rounded-lg shadow">
+      <div className="flex flex-col max-w-3xl bg-white border border-gray-300 rounded-lg shadow my-5">
         <div className="p-8 space-y-6">
           {course === null ? (
             <p>Ładowanie danych kursu...</p>
@@ -260,6 +260,24 @@ const CourseDetails = () => {
                   </table>
                 </>
               )}
+              {activeTab === "Zadania" &&
+                getUserRole() === UserRoles.Teacher && (
+                  <div className="border-t border-gray-300 pt-4">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="w-96">
+                        <p className="text-gray-500 mb-3 text-center">
+                          Lub kliknij poniżej, aby by utworzyć nowe zadanie.
+                        </p>
+                      </div>
+                      <Link to={`/course/${course.id}/create-assignment`}>
+                        {" "}
+                        <button className="text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-center py-2 px-2.5">
+                          Utwórz zadanie
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
             </div>
           )}
         </div>

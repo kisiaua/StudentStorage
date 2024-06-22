@@ -1,10 +1,34 @@
 import axios from "./apiConfig.ts";
+import { AssignmentForm } from "../models/AssignmentForm.ts";
 
 export const getAssignment = async (id: string, jwtAccessToken: string) => {
   try {
     const response = await axios.get(`/api/v1/Assignments/${id}`, {
       headers: { Authorization: `Bearer ${jwtAccessToken}` },
     });
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const createAssignment = async (
+  assignment: AssignmentForm,
+  id: string,
+  jwtAccessToken: string,
+) => {
+  try {
+    const response = await axios.post(
+      `/api/v1/Courses/${id}/Assignments`,
+      JSON.stringify(assignment),
+      {
+        headers: {
+          Authorization: `Bearer ${jwtAccessToken}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
     return response.data;
   } catch (err) {
     console.log(err);
