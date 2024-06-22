@@ -15,20 +15,20 @@ const MyCourses = () => {
   const userRole = getUserRole();
   const userId = getUserId();
 
-  // useEffect(() => {
-  //   const fetchCourses = async () => {
-  //     if (userRole === UserRoles.Student) {
-  //       return await getStudentCourses(userId, auth?.jwtAccessToken ?? "");
-  //     }
-  //     if (userRole === UserRoles.Teacher) {
-  //       return await getTeacherCourses(userId, auth?.jwtAccessToken ?? "");
-  //     }
-  //   };
-  //   fetchCourses().then((data) => {
-  //     console.log(data);
-  //     setMyCourses(data);
-  //   });
-  // }, [auth?.jwtAccessToken, userId, userRole]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      if (userRole === UserRoles.Student) {
+        return await getStudentCourses(userId, auth?.jwtAccessToken ?? "");
+      }
+      if (userRole === UserRoles.Teacher) {
+        return await getTeacherCourses(userId, auth?.jwtAccessToken ?? "");
+      }
+    };
+    fetchCourses().then((data) => {
+      console.log(data);
+      setMyCourses(data);
+    });
+  }, [auth?.jwtAccessToken, userId, userRole]);
 
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
