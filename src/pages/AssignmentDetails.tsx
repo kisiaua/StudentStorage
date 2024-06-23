@@ -27,6 +27,9 @@ const AssignmentDetails = () => {
   const { courseId, assignmentId } = useParams();
   const { auth, getUserRole } = useAuth();
 
+  const isSubmitionLate =
+    assignment?.dueDate && new Date(assignment.dueDate) < new Date();
+
   const handleDownloadSolution = async (solution: Solution) => {
     const user = members.find(
       (member) => member.user.userName === solution.userName,
@@ -120,13 +123,28 @@ const AssignmentDetails = () => {
                   : "Ładowanie..."}
               </p>
               {!isAddAssignmentFormOpen &&
-                getUserRole() === UserRoles.Student && (
+                getUserRole() === UserRoles.Student &&
+                assignment?.allowLateSubmissions && (
                   <button
                     onClick={handleAddButton}
                     className="py-2.5 px-3.5 mt-4 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
                   >
                     Dodaj zadanie
                   </button>
+                )}
+              {getUserRole() == UserRoles.Student &&
+                isSubmitionLate &&
+                !assignment?.allowLateSubmissions && (
+                  <h5 className="mt-3 text-lg font-bold tracking-tight text-red-700">
+                    Termin minął, przesyłanie nie jest już możliwe.
+                  </h5>
+                )}
+              {getUserRole() == UserRoles.Student &&
+                isSubmitionLate &&
+                assignment?.allowLateSubmissions && (
+                  <p className="mt-3 text-lg font-semibold tracking-tight text-gray-700">
+                    Termin minął, ale nadal możesz przesłać rozwiązanie.
+                  </p>
                 )}
               {isAddAssignmentFormOpen && (
                 <div className="mt-5">
