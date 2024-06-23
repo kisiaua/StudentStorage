@@ -80,7 +80,7 @@ const CreateAssignment = () => {
                 htmlFor="assignment-description"
                 className="block mb-2 font-medium"
               >
-                Opis kursu
+                Opis zadania
               </label>
               <textarea
                 id="assignment-description"
@@ -149,7 +149,7 @@ const CreateAssignment = () => {
               </label>
             </div>
             <button className="w-full text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-center py-2.5">
-              Utwórz kurs
+              Utwórz zadanie
             </button>
           </form>
         </div>

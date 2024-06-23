@@ -1,6 +1,5 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Index from "./pages/Index.tsx";
 import Register from "./pages/Register.tsx";
 import Login from "./pages/Login.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
@@ -19,11 +18,11 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Index />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
         <Route element={<RequireAuth allowedRoles={UserRoles.Student} />}>
+          <Route path="/" element={<MyCourses />} />
           <Route path="/test" element={<Test />} />
           <Route path="/my-courses" element={<MyCourses />} />
           <Route

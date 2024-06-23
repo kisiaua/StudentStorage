@@ -9,16 +9,17 @@ interface NavLinksProps {
 }
 
 const NavLinks: React.FC<NavLinksProps> = ({ isMenuOpen, toggleMenu }) => {
-  const { isTokenExpired, getUserRoles, clearAuth } = useAuth();
+  const { isTokenExpired, getUserRole, clearAuth } = useAuth();
 
-  const isAdmin = getUserRoles().includes(UserRoles.Admin);
+  const userRole = getUserRole();
 
   return (
     <div className={`${isMenuOpen ? "" : "hidden"} w-full md:block md:w-auto`}>
       <ul className="font-medium flex flex-col md:flex-row space-x-0 md:space-x-8 p-4 mt-4 border border-gray-200 rounded-lg md:p-0 md:mt-0 md:border-none">
         {!isTokenExpired() ? (
           <>
-            {!isAdmin && (
+            {(userRole === UserRoles.Student ||
+              userRole === UserRoles.Teacher) && (
               <li>
                 <Link
                   to="/my-courses"
@@ -26,6 +27,28 @@ const NavLinks: React.FC<NavLinksProps> = ({ isMenuOpen, toggleMenu }) => {
                   onClick={toggleMenu}
                 >
                   Moje kursy
+                </Link>
+              </li>
+            )}
+            {userRole === UserRoles.Student && (
+              <li>
+                <Link
+                  to="/courses"
+                  className="block py-2 px-3 hover:text-blue-700"
+                  onClick={toggleMenu}
+                >
+                  Wszystkie kursy
+                </Link>
+              </li>
+            )}
+            {userRole === UserRoles.Teacher && (
+              <li>
+                <Link
+                  to="/create-course"
+                  className="block py-2 px-3 hover:text-blue-700"
+                  onClick={toggleMenu}
+                >
+                  Utwórz kurs
                 </Link>
               </li>
             )}
