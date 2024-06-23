@@ -77,3 +77,23 @@ export const getAssignmentSummarySolutions = async (
     throw err;
   }
 };
+
+export const downloadSolution = async (
+  userId: number,
+  assignmentId: string,
+  jwtAccessToken: string,
+) => {
+  try {
+    const response = await axios.get(
+      `/api/v1/Users/${userId}/Assignments/${assignmentId}/Solutions/zip`,
+      {
+        headers: { Authorization: `Bearer ${jwtAccessToken}` },
+        responseType: "blob",
+      },
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

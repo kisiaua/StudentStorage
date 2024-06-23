@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { Assignment } from "../models/Assignment.ts";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  downloadSolution,
   getAssignment,
   getAssignmentSummarySolutions,
   SubmitSolution,
@@ -10,9 +11,10 @@ import useAuth from "../hooks/useAuth.ts";
 import AddAssignmentDropzone from "../components/AddAssignmentDropzone.tsx";
 import ConfirmationSentAssignmentModal from "../components/ConfirmationSentAssignmentModal.tsx";
 import { UserRoles } from "../models/UserRoles.ts";
-import { StatusDescriptions } from "../models/StatusDescription.ts";
 import { Solution, SolutionStatuses } from "../models/Solution.ts";
 import { parseDateToLocalFormat } from "../utils/dateUtils.ts";
+import { JoinRequest } from "../models/JoinRequest.ts";
+import { getJoinRequests } from "../api/coursesApiClient.ts";
 
 const AssignmentDetails = () => {
   const [assignment, setAssignment] = useState<Assignment>();
@@ -20,9 +22,43 @@ const AssignmentDetails = () => {
   const [isAddAssignmentFormOpen, setIsAddAssignmentFormOpen] =
     useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
+  const [members, setMembers] = useState<JoinRequest[]>([]);
 
-  const { assignmentId } = useParams();
+  const { courseId, assignmentId } = useParams();
   const { auth, getUserRole } = useAuth();
+
+  const handleDownloadSolution = async (solution: Solution) => {
+    const user = members.find(
+      (member) => member.user.userName === solution.userName,
+    );
+
+    const response = await downloadSolution(
+      user?.user.id as number,
+      assignmentId as string,
+      auth?.jwtAccessToken ?? "",
+    );
+
+    const url = window.URL.createObjectURL(response);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      `${assignment?.title}_${user?.user.firstName}${user?.user.lastName}.zip`,
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      return await getJoinRequests(
+        courseId as string,
+        auth?.jwtAccessToken ?? "",
+      );
+    };
+    fetchMembers().then((data) => setMembers(data));
+  }, [auth?.jwtAccessToken, courseId]);
 
   useEffect(() => {
     const fetchAssignment = async () => {
@@ -55,8 +91,6 @@ const AssignmentDetails = () => {
       auth?.jwtAccessToken ?? "",
     );
   };
-
-  console.log(assignment?.createdAt);
 
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
@@ -119,6 +153,9 @@ const AssignmentDetails = () => {
                         <th className="p-2 text-sm font-semibold text-left">
                           Status
                         </th>
+                        <th className="p-2 text-sm font-semibold text-left">
+                          Akcje
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -129,6 +166,17 @@ const AssignmentDetails = () => {
                           </td>
                           <td className="p-2 text-sm font-normal text-left">
                             {SolutionStatuses[solution.solutionStatus]}
+                          </td>
+                          <td className="p-2 text-sm font-normal text-left">
+                            {SolutionStatuses[solution.solutionStatus] ===
+                              SolutionStatuses.Submitted && (
+                              <button
+                                onClick={() => handleDownloadSolution(solution)}
+                                className="text-green-700"
+                              >
+                                Pobierz
+                              </button>
+                            )}
                           </td>
                         </tr>
                       ))}
