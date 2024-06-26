@@ -17,7 +17,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setCredentials((prevCredentials) => ({
@@ -134,23 +134,23 @@ const Register = () => {
                 className="border-2 border-gray-300 rounded-lg block p-2.5 w-full"
               />
             </div>
-            <div>
-              <label htmlFor="role" className="block mb-2 font-medium">
-                Rola
-              </label>
-              <select
-                id="role"
-                value={credentials.role}
-                name="role"
-                onChange={handleChange}
-                required
-                className="bg-white border-2 border-gray-300 rounded-lg block p-2.5 w-full"
-              >
-                <option value="student">Student</option>
-                <option value="teacher">Nauczyciel</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
+            {/*<div>*/}
+            {/*  <label htmlFor="role" className="block mb-2 font-medium">*/}
+            {/*    Rola*/}
+            {/*  </label>*/}
+            {/*  <select*/}
+            {/*    id="role"*/}
+            {/*    value={credentials.role}*/}
+            {/*    name="role"*/}
+            {/*    onChange={handleChange}*/}
+            {/*    required*/}
+            {/*    className="bg-white border-2 border-gray-300 rounded-lg block p-2.5 w-full"*/}
+            {/*  >*/}
+            {/*    <option value="student">Student</option>*/}
+            {/*    <option value="teacher">Nauczyciel</option>*/}
+            {/*    <option value="admin">Admin</option>*/}
+            {/*  </select>*/}
+            {/*</div>*/}
             <button className="w-full text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-center py-2.5">
               Zarejestruj się
             </button>
