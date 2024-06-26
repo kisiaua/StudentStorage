@@ -32,7 +32,7 @@ const MyCourses = () => {
 
   return (
     <section className="flex items-center justify-center flex-grow px-4 sm:px-0 w-full bg-gray-50 border border-t-gray-300">
-      <div className="flex flex-col max-w-3xl bg-white border border-gray-300 rounded-lg shadow">
+      <div className="flex flex-col max-w-3xl bg-white border border-gray-300 rounded-lg shadow my-5">
         <div className="flex flex-col flex-grow justify-between p-5">
           {myCourses.length !== 0 ? (
             <>
